@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react'; // Add React import
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
-export default function ProtectedRoute({ children }: { children: JSX.Element }) {
+export default function ProtectedRoute({ children }: { children: React.ReactElement }) {
     const { user, initializeAuth, loading } = useAuthStore();
     const navigate = useNavigate();
 
@@ -10,7 +10,8 @@ export default function ProtectedRoute({ children }: { children: JSX.Element }) 
         initializeAuth().then(() => {
             if (!user && !loading) navigate('/login');
         });
-    }, [user, loading]);
+        // Add all dependencies here
+    }, [user, loading, initializeAuth, navigate]);
 
     if (loading || !user) return <div>Loading...</div>;
 
