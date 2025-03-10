@@ -19,9 +19,15 @@ const useAuthStore = create<AuthStore>((set) => ({
     initializeAuth: async () => {
         set({ loading: true });
         try {
+            const token = localStorage.getItem('token');
+
+            // Add token validation
+            if (!token) throw new Error('No token found');
+
             const user = await getProfile();
             set({ user, loading: false });
         } catch (error) {
+            console.error('Auth initialization failed:', error);
             localStorage.removeItem('token');
             set({ user: null, loading: false });
         }
@@ -34,7 +40,10 @@ const useAuthStore = create<AuthStore>((set) => ({
             localStorage.setItem('token', token);
             set({ user, loading: false });
         } catch (error: any) {
-            set({ error: error.message || 'Registration failed', loading: false });
+            set({
+                error: error.response?.data?.error || 'Registration failed',
+                loading: false
+            });
         }
     },
 
@@ -44,8 +53,14 @@ const useAuthStore = create<AuthStore>((set) => ({
             const { token, user } = await login(email, password);
             localStorage.setItem('token', token);
             set({ user, loading: false });
+
+            // Immediately validate token after login
+            await getProfile();
         } catch (error: any) {
-            set({ error: error.message || 'Login failed', loading: false });
+            set({
+                error: error.response?.data?.error || 'Login failed',
+                loading: false
+            });
         }
     },
 

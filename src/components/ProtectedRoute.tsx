@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'; // Add React import
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
@@ -7,13 +7,26 @@ export default function ProtectedRoute({ children }: { children: React.ReactElem
     const navigate = useNavigate();
 
     useEffect(() => {
-        initializeAuth().then(() => {
-            if (!user && !loading) navigate('/login');
-        });
-        // Add all dependencies here
+        let isMounted = true;
+        const controller = new AbortController();
+
+        const checkAuth = async () => {
+            await initializeAuth();
+            if (isMounted && !user && !loading) {
+                navigate('/login');
+            }
+        };
+
+        checkAuth();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
     }, [user, loading, initializeAuth, navigate]);
 
-    if (loading || !user) return <div>Loading...</div>;
+    if (loading) return <div>Loading...</div>;
+    if (!user) return null;
 
     return children;
 }
