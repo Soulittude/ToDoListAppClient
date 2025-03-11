@@ -1,2 +1,2 @@
-const Loader = () => <div>Loading...</div>;
+const Loader = () => <div className="spinner">Loading...</div>;
 export default Loader;

@@ -1,2 +1,1 @@
-const Button = () => null;
-export default Button;
+export default () => null; // Empty for now
