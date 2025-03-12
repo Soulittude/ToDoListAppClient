@@ -1,4 +1,3 @@
-// src/pages/Register.tsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -12,9 +11,11 @@ export const RegisterPage = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
+
         try {
             await register(email, password);
-            navigate('/');  // Redirect only after successful registration
+            navigate('/');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Registration failed');
         }

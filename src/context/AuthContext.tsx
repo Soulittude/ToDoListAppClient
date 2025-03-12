@@ -12,18 +12,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>(null!);
 
+const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    // Use window.location instead of navigate to prevent state issues
+    window.location.href = '/login';
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
 
+
+
     useEffect(() => {
-        // Add health check on initial load
-        checkBackendHealth().then(isHealthy => {
-            if (!isHealthy) {
-                console.error('Backend is unavailable');
-                // You could set an error state here
-            }
-        });
+        let isMounted = true;
 
         const loadUser = async () => {
             try {
@@ -33,17 +36,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     return;
                 }
 
-                // Verify token validity with backend
                 const { data: userData } = await authService.getProfile();
-                setUser(userData);
+                if (isMounted) setUser(userData);
             } catch (error) {
-                console.error('Invalid session:', error);
+                if (isMounted) console.error('Session validation failed:', error);
                 localStorage.removeItem('token');
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
+
         loadUser();
+        return () => { isMounted = false };
     }, []);
 
     const login = async (email: string, password: string) => {
@@ -71,11 +75,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const logout = () => {
-        // Clear both token and user state
         localStorage.removeItem('token');
         setUser(null);
-        // Force full reload to reset all application state
-        window.location.href = '/login';
+        // Use navigate instead of window.location
+        window.location.href = '/login'; // Full page reset to clear state
     };
 
     const register = async (email: string, password: string) => {
@@ -99,3 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export const useAuth = () => useContext(AuthContext);
+
+function setUser(arg0: null) {
+    throw new Error('Function not implemented.');
+}

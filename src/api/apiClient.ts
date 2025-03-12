@@ -37,12 +37,12 @@ api.interceptors.response.use(
 // Health check function.
 export const checkBackendHealth = async () => {
     try {
-        const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-        const response = await axios.get(`${baseURL}/health`);
-        console.log('Backend connection OK:', response.data);
-        return true;
+        const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/health`,
+            { timeout: 3000 } // Add timeout
+        );
+        return response.status === 200;
     } catch (error) {
-        console.error('Backend connection failed:', error);
         return false;
     }
 };
