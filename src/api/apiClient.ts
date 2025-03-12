@@ -17,10 +17,11 @@ api.interceptors.request.use((config) => {
 // Add response interceptor to handle errors
 api.interceptors.response.use(
     (response) => {
-        // Optional: Add success logging here
+        console.log('Response received:', response.config.url, response.status);
         return response;
     },
     (error) => {
+        console.error('Request failed:', error.config?.url, error.response?.status);
         // Automatically handle 401 errors
         if (error.response?.status === 401) {
             localStorage.removeItem('token');

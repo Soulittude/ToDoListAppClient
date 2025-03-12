@@ -28,39 +28,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const loadUser = async () => {
             try {
                 const token = localStorage.getItem('token');
-                if (token) {
-                    const { data: userData } = await authService.getProfile();
-                    setUser(userData);
+                if (!token) {
+                    setLoading(false);
+                    return;
                 }
+
+                // Verify token validity with backend
+                const { data: userData } = await authService.getProfile();
+                setUser(userData);
             } catch (error) {
-                console.error('Session validation failed:', error);
+                console.error('Invalid session:', error);
+                localStorage.removeItem('token');
             } finally {
                 setLoading(false);
             }
         };
-
         loadUser();
     }, []);
 
     const login = async (email: string, password: string) => {
         try {
-            // First verify backend connection
-            const isHealthy = await checkBackendHealth();
-            if (!isHealthy) throw new Error('Backend service unavailable');
+            // Clear previous state
+            localStorage.removeItem('token');
+            setUser(null);
 
-            // Proceed with login
-            await authService.login(email, password); // Token is handled in service
+            // Get fresh token
+            const { token } = await authService.login(email, password);
+            console.log('Stored token:', localStorage.getItem('token'));
+
+            // Verify token exists before making any requests
+            if (!token) throw new Error('Authentication failed');
+
+            // Immediate profile fetch with new token
             const { data: userData } = await authService.getProfile();
+            console.log('Profile data:', userData);
             setUser(userData);
         } catch (error) {
-            console.error('Login failed:', error);
-            throw error; // Rethrow for form handling
+            localStorage.removeItem('token');
+            console.error('Full login error:', error);
+            throw error;
         }
     };
 
     const logout = () => {
-        authService.logout();
+        // Clear both token and user state
+        localStorage.removeItem('token');
         setUser(null);
+        // Force full reload to reset all application state
+        window.location.href = '/login';
     };
 
     const register = async (email: string, password: string) => {
