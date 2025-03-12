@@ -33,7 +33,7 @@ api.interceptors.response.use(
     }
 );
 
-// Health check function
+// Health check function.
 export const checkBackendHealth = async () => {
     try {
         const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
