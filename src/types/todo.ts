@@ -6,3 +6,13 @@ export interface Todo {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface TodoCreateDTO {
+    text: string;
+    completed?: boolean;
+}
+
+export interface TodoUpdateDTO {
+    text?: string;
+    completed?: boolean;
+}
