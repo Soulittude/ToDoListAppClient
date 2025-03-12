@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage = () => {
@@ -25,23 +25,29 @@ export const LoginPage = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
-            />
-            <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-            />
-            {error && <div className="error">{error}</div>}
-            <button type="submit">Login</button>
-        </form>
+        <div className="auth-container">
+            <h2>Log In</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
+                {error && <div className="error">{error}</div>}
+                <button type="submit">Login</button>
+                <p>
+                    Already have an account? <Link to="/register">Want to register?</Link>
+                </p>
+            </form>
+        </div>
     );
 };
