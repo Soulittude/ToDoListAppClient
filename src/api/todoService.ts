@@ -24,5 +24,10 @@ export const todoService = {
 
     async deleteTodo(id: string): Promise<void> {
         await api.delete(`/todos/${id}`);
+    },
+
+    async refreshTodos(): Promise<Todo[]> {
+        const data = await this.getAllTodos();
+        return data;
     }
 };

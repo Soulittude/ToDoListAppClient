@@ -1,45 +1,67 @@
 import { useEffect, useState } from 'react';
 import { todoService } from '../../api/todoService';
 import { Todo } from '../../types/todo';
+import { TodoForm } from './TodoForm';
+import { TodoItem } from './TodoItem'; // Add this import
 
 export const TodoList = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        const loadTodos = async () => {
-            try {
-                const data = await todoService.getAllTodos();
-                setTodos(data);
-                setError('');
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to load todos');
-                console.error('Todo fetch error:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const loadTodos = async () => {
+        setLoading(true);
+        try {
+            const data = await todoService.refreshTodos();
+            setTodos(data);
+        } catch (error) {
+            console.error('Error loading todos:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    // Add to useEffect
+    useEffect(() => {
         loadTodos();
     }, []);
 
     if (loading) return <div>Loading todos...</div>;
 
-    return (
-        <div>
-            {error && <div className="error">{error}</div>}
+    const handleDelete = async (id: string) => {
+        try {
+            await todoService.deleteTodo(id);
+            setTodos(todos.filter(todo => todo._id !== id));
+        } catch (error) {
+            console.error('Error deleting todo:', error);
+        }
+    };
 
-            {todos.length === 0 ? (
-                <div>No todos found. Create your first todo!</div>
-            ) : (
-                todos.map((todo) => (
-                    <div key={todo._id}>
-                        <h3>{todo.text}</h3>
-                        <p>{todo.completed ? '✅ Completed' : '⏳ Pending'}</p>
-                    </div>
-                ))
-            )}
+    const handleToggle = async (id: string) => {
+        try {
+            const todo = todos.find(t => t._id === id);
+            if (!todo) return;
+
+            const updated = await todoService.updateTodo(id, {
+                completed: !todo.completed
+            });
+            setTodos(todos.map(t => t._id === id ? updated : t));
+        } catch (error) {
+            console.error('Error updating todo:', error);
+        }
+    };
+
+    return (
+        <div className="todo-list">
+            <TodoForm onAdd={loadTodos} />
+            {todos.map((todo) => (
+                <TodoItem
+                    key={todo._id}
+                    todo={todo}
+                    onDelete={handleDelete}
+                    onToggle={handleToggle}
+                />
+            ))}
         </div>
     );
 };
