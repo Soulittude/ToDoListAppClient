@@ -7,7 +7,7 @@ export const HomePage = () => {
     if (loading) return <div>Checking session...</div>;
 
     return (
-        <div>
+        <div className="auth-container">
             <h1>Welcome, {user?.email}</h1>
             <button onClick={logout}>Logout</button>
             <TodoList />
