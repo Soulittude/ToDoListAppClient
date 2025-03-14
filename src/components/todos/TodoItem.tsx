@@ -7,13 +7,21 @@ interface TodoItemProps {
 }
 
 export const TodoItem = ({ todo, onDelete, onToggle }: TodoItemProps) => (
-    <div className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-        <input
-            type="checkbox"
-            checked={todo.completed}
-            onChange={() => onToggle(todo._id)}
-        />
-        <span>{todo.text}</span>
-        <button onClick={() => onDelete(todo._id)}>Delete</button>
+    <div className="todo-item">
+        <div className="todo-content">
+            <div
+                className={`custom-checkbox ${todo.completed ? 'checked' : ''}`}
+                onClick={() => onToggle(todo._id)}
+            >
+                <span className="check-icon">✓</span>
+            </div>
+            <span className="todo-text">{todo.text}</span>
+        </div>
+        <button
+            className="btn btn-danger"
+            onClick={() => onDelete(todo._id)}
+        >
+            Delete
+        </button>
     </div>
 );

@@ -22,14 +22,17 @@ export const TodoForm = ({ onAdd }: TodoFormProps) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="todo-form">
+        <form className="todo-form" onSubmit={handleSubmit}>
             <input
                 type="text"
+                className="todo-input"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Add new todo"
             />
-            <button type="submit">Add Todo</button>
+            <button type="submit" className="btn btn-primary">
+                Add Todo
+            </button>
         </form>
     );
 };

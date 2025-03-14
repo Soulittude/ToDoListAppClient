@@ -5,16 +5,21 @@ export const HomePage = () => {
     const { user, logout } = useAuth();
 
     return (
-        <div className="container">
-            <header className="header">
+        <div className="main-container">
+            {/* Header Container */}
+            <div className="header-container">
                 <div className="header-content">
-                    <h1>Welcome, {user?.email}</h1>
-                    <button className="logout-button" onClick={logout}>
+                    <h1 style={{ color: 'white', margin: 0 }}>Welcome, {user?.email}</h1>
+                    <button className="btn logout-btn" onClick={logout}>
                         Logout
                     </button>
                 </div>
-            </header>
-            <TodoList />
+            </div>
+
+            {/* Content Container */}
+            <div className="content-container">
+                <TodoList />
+            </div>
         </div>
     );
 };
