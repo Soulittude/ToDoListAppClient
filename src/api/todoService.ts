@@ -4,7 +4,7 @@ import { Todo, TodoCreateDTO, TodoUpdateDTO } from '../types/todo';
 export const todoService = {
     async getAllTodos(): Promise<Todo[]> {
         const response = await api.get('/todos');
-        return response.data.data;
+        return response.data.data.sort((a: Todo, b: Todo) => a.order - b.order);
     },
 
     async getTodoById(id: string): Promise<Todo> {
@@ -26,8 +26,11 @@ export const todoService = {
         await api.delete(`/todos/${id}`);
     },
 
+    async updateTodoOrder(ids: string[]): Promise<void> {
+        await api.patch('/todos/reorder', { ids });
+    },
+
     async refreshTodos(): Promise<Todo[]> {
-        const data = await this.getAllTodos();
-        return data;
+        return this.getAllTodos();
     }
 };

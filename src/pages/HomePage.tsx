@@ -1,5 +1,6 @@
 import { TodoList } from '../components/todos/TodoList';
 import { useAuth } from '../context/AuthContext';
+import { format } from 'date-fns';
 
 export const HomePage = () => {
     const { user, logout } = useAuth();
@@ -13,6 +14,9 @@ export const HomePage = () => {
                     <button className="btn logout-btn" onClick={logout}>
                         Logout
                     </button>
+                    <div className="date-header">
+                        {format(new Date(), 'EEEE, MMMM do')}
+                    </div>
                 </div>
             </div>
 
