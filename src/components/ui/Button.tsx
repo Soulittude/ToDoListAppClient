@@ -1,1 +1,1 @@
-export default () => null; // Empty for now
+export default () => null;
