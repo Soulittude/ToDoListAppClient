@@ -3,13 +3,24 @@ import DatePicker from 'react-datepicker';
 import { TodoCreateDTO } from '../../types/todo';
 import { todoService } from '../../api/todoService';
 import 'react-datepicker/dist/react-datepicker.css';
+import {
+    Grid,
+    TextField,
+    MenuItem,
+    Button,
+    useTheme,
+    useMediaQuery
+} from '@mui/material';
+import { AddCircleOutline } from '@mui/icons-material';
 
 interface TodoFormProps {
     onAdd: () => void;
-    initialOrder: number;  // Add new prop
+    initialOrder: number;
 }
 
 export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [text, setText] = useState('');
     const [dueDate, setDueDate] = useState<Date | null>(null);
     const [recurrence, setRecurrence] = useState<'none' | 'daily' | 'weekly'>('none');
@@ -23,7 +34,7 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
                 text,
                 dueDate: dueDate?.toISOString(),
                 recurrence: recurrence !== 'none' ? recurrence : undefined,
-                order: initialOrder,  // Use initialOrder from props
+                order: initialOrder,
             };
 
             await todoService.createTodo(todoData);
@@ -37,41 +48,66 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
     };
 
     return (
-        <form className="todo-form" onSubmit={handleSubmit}>
-            <div className="form-grid">
-                <input
-                    type="text"
-                    className="todo-input"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Add new todo"
-                    required
-                />
+        <form onSubmit={handleSubmit}>
+            <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
+                <Grid item xs={12} sm={5}>
+                    <TextField
+                        fullWidth
+                        label="New Todo"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        variant="outlined"
+                        size="small"
+                    />
+                </Grid>
 
-                <DatePicker
-                    selected={dueDate}
-                    onChange={(date) => setDueDate(date)}
-                    placeholderText="Select due date"
-                    className="date-picker"
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                    showTimeInput
-                    minDate={new Date()}
-                />
+                <Grid item xs={6} sm={3}>
+                    <DatePicker
+                        selected={dueDate}
+                        onChange={(date) => setDueDate(date)}
+                        placeholderText="Due Date"
+                        customInput={
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                size="small"
+                                label="Due Date"
+                            />
+                        }
+                        showTimeInput
+                        minDate={new Date()}
+                    />
+                </Grid>
 
-                <select
-                    value={recurrence}
-                    onChange={(e) => setRecurrence(e.target.value as any)}
-                    className="recurrence-select"
-                >
-                    <option value="none">No recurrence</option>
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                </select>
+                <Grid item xs={6} sm={2}>
+                    <TextField
+                        fullWidth
+                        select
+                        label="Recurrence"
+                        value={recurrence}
+                        onChange={(e) => setRecurrence(e.target.value as any)}
+                        variant="outlined"
+                        size="small"
+                    >
+                        <MenuItem value="none">None</MenuItem>
+                        <MenuItem value="daily">Daily</MenuItem>
+                        <MenuItem value="weekly">Weekly</MenuItem>
+                    </TextField>
+                </Grid>
 
-                <button type="submit" className="btn btn-primary">
-                    Add Todo
-                </button>
-            </div>
+                <Grid item xs={12} sm={2}>
+                    <Button
+                        fullWidth
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddCircleOutline />}
+                        size={isMobile ? "small" : "medium"}
+                    >
+                        Add
+                    </Button>
+                </Grid>
+            </Grid>
         </form>
     );
 };
