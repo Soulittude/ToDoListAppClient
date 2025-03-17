@@ -34,11 +34,11 @@ export const HomePage = () => {
                         onClick={logout}
                         sx={{
                             borderColor: 'rgba(255,255,255,0.3)',
-                            backgroundColor: 'rgba(255,0,0,0.6)',
+                            backgroundColor: 'rgba(255,0,0,0.5)',
                             color: 'white',
                             '&:hover': {
                                 borderColor: 'white',
-                                backgroundColor: 'rgba(255,0,0,0.7)',
+                                backgroundColor: 'rgba(255,0,0,0.6)',
                             }
                         }}
                     >
