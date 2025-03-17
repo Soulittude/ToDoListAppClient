@@ -9,29 +9,41 @@ export const HomePage = () => {
 
     return (
         <Container maxWidth="md" sx={{ py: 4 }}>
-            <AppBar position="static" sx={{ borderRadius: 3, mb: 4 }}>
-                <Toolbar sx={{ justifyContent: 'space-between' }}>
-                    <Typography variant="h6" component="div">
+            <AppBar position="static" sx={{
+                borderRadius: 3,
+                mb: 4,
+                background: 'linear-gradient(45deg, #4f46e5 30%, #6366f1 90%)'
+            }}>
+                <Toolbar sx={{
+                    justifyContent: 'space-between',
+                    gap: 2,
+                    flexWrap: 'wrap'
+                }}>
+                    <Typography variant="h6" sx={{ color: 'white' }}>
                         Welcome, {user?.email}
                     </Typography>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                        <Typography variant="subtitle1">
-                            {format(new Date(), 'EEEE, MMMM do')}
-                        </Typography>
-                        <Button
-                            variant="outlined"
-                            color="inherit"
-                            startIcon={<LogoutIcon />}
-                            onClick={logout}
-                            sx={{
-                                borderColor: 'rgba(255,255,255,0.4)',
-                                '&:hover': { borderColor: 'rgba(255,255,255,0.8)' }
-                            }}
-                        >
-                            Logout
-                        </Button>
-                    </div>
+                    <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.9)' }}>
+                        {format(new Date(), 'EEEE, MMMM do')}
+                    </Typography>
+
+                    <Button
+                        variant="outlined"
+                        color="inherit"
+                        startIcon={<LogoutIcon sx={{ color: 'white' }} />}
+                        onClick={logout}
+                        sx={{
+                            borderColor: 'rgba(255,255,255,0.3)',
+                            backgroundColor: 'rgba(255,0,0,0.6)',
+                            color: 'white',
+                            '&:hover': {
+                                borderColor: 'white',
+                                backgroundColor: 'rgba(255,0,0,0.7)',
+                            }
+                        }}
+                    >
+                        Logout
+                    </Button>
                 </Toolbar>
             </AppBar>
 
