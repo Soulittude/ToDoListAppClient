@@ -74,19 +74,22 @@ export const TodoItem = ({
                 minWidth: 0,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                gap: 2 // Add gap between elements
             }}>
-                <Box sx={{ maxWidth: 'calc(100% - 120px)' }}>
+                {/* Text Content */}
+                <Box sx={{
+                    flexGrow: 1,
+                    minWidth: 0,
+                    overflow: 'hidden'
+                }}>
                     <Typography
                         variant="body1"
                         sx={{
-                            fontWeight: 500,
-                            textDecoration: todo.completed ? 'line-through' : 'none',
-                            color: todo.completed ? 'text.secondary' : 'text.primary',
-                            mb: todo.dueDate ? 0.5 : 0,
+                            // ... existing styles
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis'
+                            textOverflow: 'ellipsis',
+                            maxWidth: '100%' // Ensure text uses available space
                         }}
                     >
                         {todo.text}

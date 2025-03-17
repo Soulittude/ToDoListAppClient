@@ -9,10 +9,10 @@ export const theme = createTheme({
             main: '#ef4444',
         },
         background: {
-            default: '#f8fafc', // Light gray background
-            paper: '#ffffff',   // White components
+            default: '#f1f5f9', // Darker gray
+            paper: '#ffffff',
         },
-        divider: '#e2e8f0' // Border color
+        divider: '#cbd5e1' // Darker border
     },
     components: {
         MuiButton: {
@@ -27,8 +27,8 @@ export const theme = createTheme({
         MuiPaper: {
             styleOverrides: {
                 root: {
-                    border: '1px solid',
-                    borderColor: '#e2e8f0',
+                    border: '2px solid', // Thicker border
+                    borderColor: 'divider',
                 },
             },
         },

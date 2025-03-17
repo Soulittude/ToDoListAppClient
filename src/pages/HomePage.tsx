@@ -47,7 +47,13 @@ export const HomePage = () => {
                 </Toolbar>
             </AppBar>
 
-            <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
+            <Paper elevation={3} sx={{
+                p: 3,
+                borderRadius: 3,
+                bgcolor: 'background.default', // Use light gray from theme
+                border: '1px solid',
+                borderColor: 'divider'
+            }}>
                 <TodoList />
             </Paper>
         </Container>
