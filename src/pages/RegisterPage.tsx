@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import {
+    Container,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Alert,
+    Link as MuiLink
+} from '@mui/material';
 
 export const RegisterPage = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +21,6 @@ export const RegisterPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-
         try {
             await register(email, password);
             navigate('/');
@@ -22,30 +30,54 @@ export const RegisterPage = () => {
     };
 
     return (
-        <div className="auth-container">
-            <h2>Register</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password (min 6 characters)"
-                    minLength={6}
-                    required
-                />
-                {error && <div className="error-message">{error}</div>}
-                <button type="submit">Register</button>
-            </form>
-            <p>
-                Already have an account? <Link to="/login">Login here</Link>
-            </p>
-        </div>
+        <Container maxWidth="xs" sx={{ mt: 8 }}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+                <Typography variant="h4" gutterBottom>
+                    Register
+                </Typography>
+
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        inputProps={{ minLength: 6 }}
+                        required
+                    />
+
+                    {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+
+                    <Button
+                        fullWidth
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        sx={{ mt: 3 }}
+                    >
+                        Register
+                    </Button>
+                </form>
+
+                <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+                    Already have an account?{' '}
+                    <MuiLink component={Link} to="/login">
+                        Login here
+                    </MuiLink>
+                </Typography>
+            </Paper>
+        </Container>
     );
 };

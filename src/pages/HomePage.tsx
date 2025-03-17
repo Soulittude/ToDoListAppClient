@@ -1,3 +1,5 @@
+import { AppBar, Toolbar, Typography, Button, Container, Paper } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { TodoList } from '../components/todos/TodoList';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
@@ -6,24 +8,36 @@ export const HomePage = () => {
     const { user, logout } = useAuth();
 
     return (
-        <div className="main-container">
-            {/* Header Container */}
-            <div className="header-container">
-                <div className="header-content">
-                    <h1 style={{ color: 'white', margin: 0 }}>Welcome, {user?.email}</h1>
-                    <button className="btn logout-btn" onClick={logout}>
-                        Logout
-                    </button>
-                    <div className="date-header">
-                        {format(new Date(), 'EEEE, MMMM do')}
-                    </div>
-                </div>
-            </div>
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <AppBar position="static" sx={{ borderRadius: 3, mb: 4 }}>
+                <Toolbar sx={{ justifyContent: 'space-between' }}>
+                    <Typography variant="h6" component="div">
+                        Welcome, {user?.email}
+                    </Typography>
 
-            {/* Content Container */}
-            <div className="content-container">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                        <Typography variant="subtitle1">
+                            {format(new Date(), 'EEEE, MMMM do')}
+                        </Typography>
+                        <Button
+                            variant="outlined"
+                            color="inherit"
+                            startIcon={<LogoutIcon />}
+                            onClick={logout}
+                            sx={{
+                                borderColor: 'rgba(255,255,255,0.4)',
+                                '&:hover': { borderColor: 'rgba(255,255,255,0.8)' }
+                            }}
+                        >
+                            Logout
+                        </Button>
+                    </div>
+                </Toolbar>
+            </AppBar>
+
+            <Paper elevation={3} sx={{ p: 3, borderRadius: 3 }}>
                 <TodoList />
-            </div>
-        </div>
+            </Paper>
+        </Container>
     );
 };

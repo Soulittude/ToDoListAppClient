@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import {
+    Container,
+    Paper,
+    Typography,
+    TextField,
+    Button,
+    Alert,
+    Link as MuiLink,
+    Box
+} from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
 
 export const LoginPage = () => {
     const { user, login } = useAuth();
@@ -19,35 +30,61 @@ export const LoginPage = () => {
         }
     };
 
-    // Redirect if already logged in
     if (user) {
         return <Navigate to="/" replace />;
     }
 
     return (
-        <div className="auth-container">
-            <h2>Log In</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    required
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    required
-                />
-                {error && <div className="error">{error}</div>}
-                <button type="submit">Login</button>
-                <p>
-                    Already have an account? <Link to="/register">Want to register?</Link>
-                </p>
-            </form>
-        </div>
+        <Container maxWidth="xs" sx={{ mt: 8 }}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+                <Box sx={{ textAlign: 'center', mb: 3 }}>
+                    <LoginIcon sx={{ fontSize: 40, color: 'primary.main' }} />
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Welcome Back
+                    </Typography>
+                </Box>
+
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Email Address"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+
+                    {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
+
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        type="submit"
+                        sx={{ mt: 3 }}
+                    >
+                        Sign In
+                    </Button>
+                </form>
+
+                <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+                    Don't have an account?{' '}
+                    <MuiLink component={Link} to="/register">
+                        Create account
+                    </MuiLink>
+                </Typography>
+            </Paper>
+        </Container>
     );
 };
