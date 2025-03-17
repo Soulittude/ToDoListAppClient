@@ -9,7 +9,7 @@ import {
     MenuItem,
     Button,
     useTheme,
-    useMediaQuery
+    Box
 } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 
@@ -20,7 +20,6 @@ interface TodoFormProps {
 
 export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [text, setText] = useState('');
     const [dueDate, setDueDate] = useState<Date | null>(null);
     const [recurrence, setRecurrence] = useState<'none' | 'daily' | 'weekly'>('none');
@@ -48,66 +47,68 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center" sx={{ mb: 4 }}>
-                <Grid item xs={12} sm={5}>
-                    <TextField
-                        fullWidth
-                        label="New Todo"
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        variant="outlined"
-                        size="small"
-                    />
-                </Grid>
+        <Box sx={{ mb: 3, p: 2, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 1 }}>
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} md={5}>
+                        <TextField
+                            fullWidth
+                            label="New Todo"
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            variant="outlined"
+                            size="small"
+                        />
+                    </Grid>
 
-                <Grid item xs={6} sm={3}>
-                    <DatePicker
-                        selected={dueDate}
-                        onChange={(date) => setDueDate(date)}
-                        placeholderText="Due Date"
-                        customInput={
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                size="small"
-                                label="Due Date"
-                            />
-                        }
-                        showTimeInput
-                        minDate={new Date()}
-                    />
-                </Grid>
+                    <Grid item xs={6} md={3}>
+                        <DatePicker
+                            selected={dueDate}
+                            onChange={(date) => setDueDate(date)}
+                            placeholderText="Due Date"
+                            customInput={
+                                <TextField
+                                    fullWidth
+                                    variant="outlined"
+                                    size="small"
+                                    label="Due Date"
+                                />
+                            }
+                            showTimeInput
+                            minDate={new Date()}
+                        />
+                    </Grid>
 
-                <Grid item xs={6} sm={2}>
-                    <TextField
-                        fullWidth
-                        select
-                        label="Recurrence"
-                        value={recurrence}
-                        onChange={(e) => setRecurrence(e.target.value as any)}
-                        variant="outlined"
-                        size="small"
-                    >
-                        <MenuItem value="none">None</MenuItem>
-                        <MenuItem value="daily">Daily</MenuItem>
-                        <MenuItem value="weekly">Weekly</MenuItem>
-                    </TextField>
-                </Grid>
+                    <Grid item xs={6} md={2}>
+                        <TextField
+                            fullWidth
+                            select
+                            label="Repeat"
+                            value={recurrence}
+                            onChange={(e) => setRecurrence(e.target.value as any)}
+                            variant="outlined"
+                            size="small"
+                        >
+                            <MenuItem value="none">Never</MenuItem>
+                            <MenuItem value="daily">Daily</MenuItem>
+                            <MenuItem value="weekly">Weekly</MenuItem>
+                        </TextField>
+                    </Grid>
 
-                <Grid item xs={12} sm={2}>
-                    <Button
-                        fullWidth
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddCircleOutline />}
-                        size={isMobile ? "small" : "medium"}
-                    >
-                        Add
-                    </Button>
+                    <Grid item xs={12} md={2}>
+                        <Button
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddCircleOutline />}
+                            size="medium"
+                        >
+                            Add
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </form>
+            </form>
+        </Box>
     );
 };

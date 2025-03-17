@@ -1,5 +1,16 @@
 import { Todo } from '../../types/todo';
-import { CSSProperties } from 'react';
+import {
+    Box,
+    Checkbox,
+    IconButton,
+    Typography,
+    useTheme,
+    Stack,
+    Chip
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import { format } from 'date-fns';
 
 interface TodoItemProps {
     todo: Todo;
@@ -13,33 +24,101 @@ export const TodoItem = ({
     onDelete,
     onToggle,
     dragHandleProps
-}: TodoItemProps) => (
-    <div className="todo-item">
-        <div className="drag-handle" {...dragHandleProps}>
-            <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path d="M4 6H12M4 10H12" stroke="#64748B" strokeWidth="1.5" />
-            </svg>
-        </div>
-        <div className="todo-content">
-            <div
-                className={`custom-checkbox ${todo.completed ? 'checked' : ''}`}
-                onClick={() => onToggle(todo._id)}
-            >
-                <span className="check-icon">✓</span>
-            </div>
-            <span className="todo-text">{todo.text}</span>
-        </div>
-        <button
-            className="btn btn-danger"
-            onClick={() => onDelete(todo._id)}
+}: TodoItemProps) => {
+    const theme = useTheme();
+
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+                p: 1.5,
+                mb: 1,
+                bgcolor: 'background.paper',
+                borderRadius: 2,
+                border: `1px solid ${theme.palette.divider}`,
+                boxShadow: theme.shadows[1],
+                transition: 'all 0.2s',
+                '&:hover': {
+                    boxShadow: theme.shadows[3],
+                    transform: 'translateY(-1px)'
+                }
+            }}
         >
-            Delete
-        </button>
-    </div>
-);
+            {/* Drag Handle */}
+            <Box
+                {...dragHandleProps}
+                sx={{
+                    cursor: 'grab',
+                    color: theme.palette.action.active,
+                    display: 'flex',
+                    alignItems: 'center',
+                    '&:active': { cursor: 'grabbing' }
+                }}
+            >
+                <DragIndicatorIcon />
+            </Box>
+
+            {/* Checkbox */}
+            <Checkbox
+                checked={todo.completed}
+                onChange={() => onToggle(todo._id)}
+                color="primary"
+                sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+            />
+
+            {/* Content Area */}
+            <Box sx={{
+                flexGrow: 1,
+                minWidth: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}>
+                <Box sx={{ maxWidth: 'calc(100% - 120px)' }}>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            fontWeight: 500,
+                            textDecoration: todo.completed ? 'line-through' : 'none',
+                            color: todo.completed ? 'text.secondary' : 'text.primary',
+                            mb: todo.dueDate ? 0.5 : 0,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}
+                    >
+                        {todo.text}
+                    </Typography>
+
+                    {todo.dueDate && (
+                        <Chip
+                            size="small"
+                            label={format(new Date(todo.dueDate), 'MMM dd, HH:mm')}
+                            sx={{
+                                borderRadius: 1,
+                                bgcolor: 'action.selected',
+                                fontSize: '0.75rem'
+                            }}
+                        />
+                    )}
+                </Box>
+
+                <IconButton
+                    onClick={() => onDelete(todo._id)}
+                    size="small"
+                    sx={{
+                        color: 'text.secondary',
+                        '&:hover': {
+                            color: 'error.main',
+                            bgcolor: 'error.light'
+                        }
+                    }}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </Box>
+        </Box>
+    );
+};

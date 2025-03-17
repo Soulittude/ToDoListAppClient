@@ -8,6 +8,11 @@ export const theme = createTheme({
         secondary: {
             main: '#ef4444',
         },
+        background: {
+            default: '#f8fafc', // Light gray background
+            paper: '#ffffff',   // White components
+        },
+        divider: '#e2e8f0' // Border color
     },
     components: {
         MuiButton: {
@@ -16,6 +21,14 @@ export const theme = createTheme({
                     textTransform: 'none',
                     borderRadius: '8px',
                     padding: '8px 16px',
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    border: '1px solid',
+                    borderColor: '#e2e8f0',
                 },
             },
         },
