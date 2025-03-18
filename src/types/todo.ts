@@ -1,14 +1,14 @@
 export interface TodoCreateDTO {
     text: string;
-    dueDate?: string;
-    recurrence?: 'daily' | 'weekly';
-    order?: number;  // Add order to DTO
+    date?: string;
+    recurrence?: 'daily' | 'weekly'; // Remove 'none'
+    order?: number;
 }
 
 export interface TodoUpdateDTO {
     text?: string;
     completed?: boolean;
-    order?: number;  // Add order to update DTO
+    order?: number;
 }
 
 export interface Todo extends TodoCreateDTO {
@@ -17,5 +17,8 @@ export interface Todo extends TodoCreateDTO {
     user: string;
     createdAt: string;
     updatedAt: string;
-    order: number;  // Make order required in main interface
+    order: number;
+    originalTodo?: string;
+    isRecurringInstance?: boolean;
+    nextRecurrence?: string;
 }

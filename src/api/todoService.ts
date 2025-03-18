@@ -32,5 +32,14 @@ export const todoService = {
 
     async refreshTodos(): Promise<Todo[]> {
         return this.getAllTodos();
+    },
+
+    async createSpecificDateTodo(todoData: {
+        text: string;
+        specificDate: string;
+        order: number
+    }): Promise<Todo> {
+        const response = await api.post('/todos/specific-date', todoData);
+        return response.data.data;
     }
 };
