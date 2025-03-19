@@ -52,7 +52,7 @@ A modern todo application with three task types, drag-and-drop functionality, an
 ```
 bash
 Copy
-git clone https://github.com/Soulittude/todo-app-client.git
+git clone https://github.com/Soulittude/todolistappclient.git
 cd todo-app-client
 ```
 ### 2. Install Dependencies
