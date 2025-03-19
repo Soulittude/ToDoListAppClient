@@ -5,73 +5,51 @@ A modern todo application with three task types, drag-and-drop functionality, an
 ## Features
 ### Three Todo Types:
 
-📝 Basic: Simple text-based tasks
-
-📅 Dated: Tasks with specific due dates
-
-🔄 Recurring: Automatically repeating tasks (daily/weekly)
+- 📝 Basic: Simple text-based tasks
+- 📅 Dated: Tasks with specific due dates
+- 🔄 Recurring: Automatically repeating tasks (daily/weekly)
 
 ### Core Functionality:
 
 - Drag-and-drop reordering
-
 - Mark tasks as complete
-
 - Automatic cleanup of old completed tasks
-
 - Responsive Material-UI design
-
 - User authentication
 
 ### Special Features:
 
 - Visual date picker for dated/recurring tasks
-
 - Immediate feedback on actions
-
 - Error handling and validation
-
 - Persistent user preferences
 
 ## Technologies:
+
 - React 18
-
 - TypeScript
-
 - Material-UI (MUI)
-
 - React Beautiful DnD
-
 - Axios
-
 - React Datepicker
-
 
 ## Setup
 ### 1. Clone Repository
 ```
-bash
-Copy
 git clone https://github.com/Soulittude/todolistappclient.git
-cd todo-app-client
+cd todolistappclient
 ```
 ### 2. Install Dependencies
 ```
-bash
-Copy
 npm install
 ```
 ### 3. Environment Setup
-Create .env file:
+Create ```.env``` file:
 ```
-env
-Copy
 REACT_APP_API_URL=http://localhost:5000/api
 ```
 ### 4. Run Development Server
 ```
-bash
-Copy
 npm run dev
 ```
 ## Folder Structure
