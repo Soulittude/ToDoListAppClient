@@ -25,9 +25,19 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
     const [recurrence, setRecurrence] = useState<'daily' | 'weekly'>('daily');
     const [todoType, setTodoType] = useState<'basic' | 'dated' | 'recurring'>('basic');
 
+    const [typeError, setTypeError] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!text.trim()) return;
+
+        setTypeError(false);
+
+        // Validate type first
+        if (!todoType) {
+            setTypeError(true);
+            alert('Please select a todo type');
+            return;
+        }
 
         try {
             const todoData: TodoCreateDTO = {
@@ -35,16 +45,31 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
                 order: initialOrder
             };
 
-            if (todoType === 'dated' || todoType === 'recurring') {
-                if (!date) {
-                    alert('Please select a date');
-                    return;
-                }
-                todoData.date = date.toISOString();
-            }
+            // Explicitly handle each type
+            switch (todoType) {
+                case 'basic':
+                    // Ensure no date/recurrence
+                    delete todoData.date;
+                    delete todoData.recurrence;
+                    break;
 
-            if (todoType === 'recurring') {
-                todoData.recurrence = recurrence;
+                case 'dated':
+                    if (!date) {
+                        alert('Please select a date');
+                        return;
+                    }
+                    todoData.date = date.toISOString();
+                    delete todoData.recurrence;
+                    break;
+
+                case 'recurring':
+                    if (!date) {
+                        alert('Please select a start date');
+                        return;
+                    }
+                    todoData.date = date.toISOString();
+                    todoData.recurrence = recurrence;
+                    break;
             }
 
             await todoService.createTodo(todoData);
@@ -67,8 +92,18 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
                         <ToggleButtonGroup
                             value={todoType}
                             exclusive
-                            onChange={(_, newType) => setTodoType(newType)}
+                            onChange={(_, newType) => {
+                                if (newType) { // Prevent deselection
+                                    setTodoType(newType);
+                                    setTypeError(false);
+                                }
+                            }}
                             fullWidth
+                            sx={{
+                                '& .MuiToggleButton-root': {
+                                    borderColor: theme => typeError ? theme.palette.error.main : 'inherit'
+                                }
+                            }}
                         >
                             <ToggleButton value="basic">
                                 <TextFields sx={{ mr: 1 }} /> Basic
@@ -80,6 +115,11 @@ export const TodoForm = ({ onAdd, initialOrder }: TodoFormProps) => {
                                 <Replay sx={{ mr: 1 }} /> Recurring
                             </ToggleButton>
                         </ToggleButtonGroup>
+                        {typeError && (
+                            <Box sx={{ color: 'error.main', mt: 1 }} role="alert">
+                                Please select a todo type
+                            </Box>
+                        )}
                     </Grid>
 
                     <Grid item xs={12} md={todoType === 'basic' ? 12 : 5}>
