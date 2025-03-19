@@ -5,7 +5,7 @@ import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import { todoService } from '../../api/todoService';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { SortableItem } from './SortableItem';
+import { SortableTodo } from './SortableTodo';
 
 export const TodoList = () => {
     const queryClient = useQueryClient();
@@ -67,7 +67,7 @@ export const TodoList = () => {
                     strategy={verticalListSortingStrategy}
                 >
                     {todos?.map((todo) => (
-                        <SortableItem
+                        <SortableTodo
                             key={todo._id}
                             id={todo._id}
                             todo={todo}

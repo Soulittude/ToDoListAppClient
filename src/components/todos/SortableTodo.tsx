@@ -4,7 +4,7 @@ import { TodoItem } from './TodoItem';
 import { useSortable } from '@dnd-kit/sortable';
 import { Todo } from '../../types/todo';
 
-export const SortableItem = ({ id, todo, onDelete, onToggle }: {
+export const SortableTodo = ({ id, todo, onDelete, onToggle }: {
     id: string;
     todo: Todo;
     onDelete: (id: string) => void;
